@@ -36,4 +36,8 @@ class DataRepository {
     dataStore.insert(
         position.latitude.toString(), position.longitude.toString());
   }
+
+  Future<void> deleteAll() async {
+    dataStore.deleteAll();
+  }
 }

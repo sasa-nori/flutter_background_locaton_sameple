@@ -47,6 +47,12 @@ class RecordListViewModel extends ChangeNotifier {
       }
     });
   }
+
+  void clearData() async {
+    await _dataRepository.deleteAll();
+    recordList.clear();
+    fetch();
+  }
 }
 
 enum RecordListViewModelState {

@@ -28,13 +28,15 @@ class ChannelManger {
 
   void checkPermissions() {
     if (Platform.isAndroid) {
-      _channel.invokeMethod(_checkPermissionsMethodName);
+      _channel.invokeMethod(
+        _checkPermissionsMethodName,
+      );
     }
   }
 
   /// 15分待ちたくない時のテスト用
   void requestLocation() {
-    _channel.invokeMethod("requestLocation", {"methodName": "requestLocation"});
+    _channel.invokeMethod("requestLocation", {"methodName": "requestTest"});
   }
 
   void startBackgroundService() {
@@ -48,16 +50,15 @@ class ChannelManger {
 
   Future<void> _platformCallHandler(MethodCall call) async {
     switch (call.method) {
-      // 15分待ちたくない時のテスト用
-      case "requestLocation":
-        DataRepository().addRecord();
-        break;
+      case "requestTest":
+        // 15分待ちたくない時のテスト用
+        // wait DataRepository().addRecord();
+        return Future.value("call requestTest");
       case _targetMethodName:
-        DataRepository().addRecord();
-        break;
+        await DataRepository().addRecord();
+        return Future.value("call $_targetMethodName");
       default:
         print('Unknown method ${call.method}');
-        throw MissingPluginException();
     }
   }
 }

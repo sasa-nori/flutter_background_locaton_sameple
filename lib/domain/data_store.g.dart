@@ -12,11 +12,13 @@ class Location extends DataClass implements Insertable<Location> {
   final String longitude;
   final String latitude;
   final String createdAt;
+
   Location(
       {required this.id,
       required this.longitude,
       required this.latitude,
       required this.createdAt});
+
   factory Location.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -32,6 +34,7 @@ class Location extends DataClass implements Insertable<Location> {
           .mapFromDatabaseResponse(data['${effectivePrefix}created_at']),
     );
   }
+
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -75,6 +78,7 @@ class Location extends DataClass implements Insertable<Location> {
       createdAt: serializer.fromJson<String>(json['createdAt']),
     );
   }
+
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
@@ -94,6 +98,7 @@ class Location extends DataClass implements Insertable<Location> {
         latitude: latitude ?? this.latitude,
         createdAt: createdAt ?? this.createdAt,
       );
+
   @override
   String toString() {
     return (StringBuffer('Location(')
@@ -108,6 +113,7 @@ class Location extends DataClass implements Insertable<Location> {
   @override
   int get hashCode => $mrjf($mrjc(id.hashCode,
       $mrjc(longitude.hashCode, $mrjc(latitude.hashCode, createdAt.hashCode))));
+
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -123,12 +129,14 @@ class TableLocationCompanion extends UpdateCompanion<Location> {
   final Value<String> longitude;
   final Value<String> latitude;
   final Value<String> createdAt;
+
   const TableLocationCompanion({
     this.id = const Value.absent(),
     this.longitude = const Value.absent(),
     this.latitude = const Value.absent(),
     this.createdAt = const Value.absent(),
   });
+
   TableLocationCompanion.insert({
     this.id = const Value.absent(),
     required String longitude,
@@ -137,6 +145,7 @@ class TableLocationCompanion extends UpdateCompanion<Location> {
   })   : longitude = Value(longitude),
         latitude = Value(latitude),
         createdAt = Value(createdAt);
+
   static Insertable<Location> custom({
     Expression<int>? id,
     Expression<String>? longitude,
@@ -198,10 +207,13 @@ class $TableLocationTable extends TableLocation
     with TableInfo<$TableLocationTable, Location> {
   final GeneratedDatabase _db;
   final String? _alias;
+
   $TableLocationTable(this._db, [this._alias]);
+
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedIntColumn id = _constructId();
+
   GeneratedIntColumn _constructId() {
     return GeneratedIntColumn('id', $tableName, false,
         hasAutoIncrement: true, declaredAsPrimaryKey: true);
@@ -210,6 +222,7 @@ class $TableLocationTable extends TableLocation
   final VerificationMeta _longitudeMeta = const VerificationMeta('longitude');
   @override
   late final GeneratedTextColumn longitude = _constructLongitude();
+
   GeneratedTextColumn _constructLongitude() {
     return GeneratedTextColumn(
       'longitude',
@@ -221,6 +234,7 @@ class $TableLocationTable extends TableLocation
   final VerificationMeta _latitudeMeta = const VerificationMeta('latitude');
   @override
   late final GeneratedTextColumn latitude = _constructLatitude();
+
   GeneratedTextColumn _constructLatitude() {
     return GeneratedTextColumn(
       'latitude',
@@ -232,6 +246,7 @@ class $TableLocationTable extends TableLocation
   final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
   @override
   late final GeneratedTextColumn createdAt = _constructCreatedAt();
+
   GeneratedTextColumn _constructCreatedAt() {
     return GeneratedTextColumn(
       'created_at',
@@ -242,12 +257,15 @@ class $TableLocationTable extends TableLocation
 
   @override
   List<GeneratedColumn> get $columns => [id, longitude, latitude, createdAt];
+
   @override
   $TableLocationTable get asDslTable => this;
+
   @override
   String get $tableName => _alias ?? 'table_location';
   @override
   final String actualTableName = 'table_location';
+
   @override
   VerificationContext validateIntegrity(Insertable<Location> instance,
       {bool isInserting = false}) {
@@ -279,6 +297,7 @@ class $TableLocationTable extends TableLocation
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
+
   @override
   Location map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
@@ -294,8 +313,10 @@ class $TableLocationTable extends TableLocation
 abstract class _$DataStore extends GeneratedDatabase {
   _$DataStore(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $TableLocationTable tableLocation = $TableLocationTable(this);
+
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [tableLocation];
 }

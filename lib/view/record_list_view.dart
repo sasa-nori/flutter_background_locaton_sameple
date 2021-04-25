@@ -14,14 +14,21 @@ import 'package:provider/provider.dart';
 class RecordListView extends BaseView {
   @override
   Widget build(BuildContext context) {
+    final viewModel = RecordListViewModel();
     return Scaffold(
         appBar: AppBar(
           title: Text("レコードリスト", style: TextStyle(fontWeight: FontWeight.bold)),
           elevation: 0,
           centerTitle: false,
         ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.close),
+          onPressed: () {
+            viewModel.clearData();
+          },
+        ),
         body: ChangeNotifierProvider(
-            create: (context) => RecordListViewModel(),
+            create: (context) => viewModel,
             child: SingleScrollbarView(
               child: Container(
                   width: context.getWidth(),

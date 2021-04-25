@@ -8,6 +8,8 @@ import ss_n.common_ktx.extension.hasPermission
 
 class MainActivity : FlutterActivity() {
 
+    override fun getCachedEngineId(): String = FLUTTER_ENGINE_ID
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         val manager = flutterEngine.dartExecutor.binaryMessenger
@@ -15,15 +17,15 @@ class MainActivity : FlutterActivity() {
         channel.setMethodCallHandler { call, result ->
             when (call.method) {
                 "requestLocation" -> {
-                    val methodName = call.argument<String>(MyCoroutineWorker.KEY_METHOD_NAME)
-                    methodName?.let {
-                        channel.invokeMethod(it, null)
-                        result.success("start method")
+                    val methodName = call.argument<String>(MyCoroutineWorker.KEY_METHOD_NAME) ?: ""
+                    applicationContext?.let {
+                        MyCoroutineWorker.startOneTimeWorker(it, methodName)
+                        result.success("start $methodName")
                     } ?: result.error("404", "MethodName is Null", "Not found MethodName")
                 }
                 "checkPermissions" -> {
                     checkPermissions()
-                    result.success("Start checkPermissions")
+                    result.success("Start ${call.method}")
                 }
                 "getPlatformVersion" -> {
                     result.success("Android ${android.os.Build.VERSION.RELEASE}")
@@ -32,7 +34,7 @@ class MainActivity : FlutterActivity() {
                     val methodName = call.argument<String>(MyCoroutineWorker.KEY_METHOD_NAME)
                     val interval = call.argument<Int>(MyCoroutineWorker.KEY_MINUTES)?.toLong()
                     applicationContext?.let {
-                        MyCoroutineWorker.startWorker(it, methodName, interval)
+                        MyCoroutineWorker.startRepeatWorker(it, methodName, interval)
                         result.success("start Worker")
                     } ?: result.error("404", "Context is Null", "Not found Context")
                 }
@@ -41,9 +43,6 @@ class MainActivity : FlutterActivity() {
                         MyCoroutineWorker.cancelWorker(it)
                         result.success("cancel Worker")
                     } ?: result.error("404", "Context is Null", "Not found Context")
-                }
-                else -> {
-                    result.notImplemented()
                 }
             }
         }
@@ -68,5 +67,7 @@ class MainActivity : FlutterActivity() {
 
         const val METHOD_START_BACKGROUND_SERVICE = "startBackgroundService"
         const val METHOD_CANCEL_BACKGROUND_SERVICE = "cancelBackgroundService"
+
+        const val FLUTTER_ENGINE_ID = "com.example.background_sample.engine"
     }
 }

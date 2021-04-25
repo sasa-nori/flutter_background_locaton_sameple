@@ -29,4 +29,8 @@ class DataStore extends _$DataStore {
   }
 
   Future<List<Location>> get allRecord => select(tableLocation).get();
+
+  Future<void> deleteAll() async {
+    await delete(tableLocation).go();
+  }
 }
