@@ -32,15 +32,16 @@ class MainActivity : FlutterActivity() {
                 }
                 METHOD_START_BACKGROUND_SERVICE -> {
                     val methodName = call.argument<String>(MyCoroutineWorker.KEY_METHOD_NAME)
-                    val interval = call.argument<Int>(MyCoroutineWorker.KEY_MINUTES)?.toLong()
+                    val interval = call.argument<Int>(MyCoroutineWorker.KEY_MINUTES)
                     applicationContext?.let {
-                        MyCoroutineWorker.startRepeatWorker(it, methodName, interval)
+                        BackgroundJobReceiver.setBackgroundJob(applicationContext, methodName, interval
+                                ?: 15)
                         result.success("start Worker")
                     } ?: result.error("404", "Context is Null", "Not found Context")
                 }
                 METHOD_CANCEL_BACKGROUND_SERVICE -> {
                     applicationContext?.let {
-                        MyCoroutineWorker.cancelWorker(it)
+                        BackgroundJobReceiver.clearBackgroundJob(applicationContext)
                         result.success("cancel Worker")
                     } ?: result.error("404", "Context is Null", "Not found Context")
                 }

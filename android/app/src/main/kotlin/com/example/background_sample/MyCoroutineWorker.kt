@@ -75,6 +75,7 @@ class MyCoroutineWorker(applicationContext: Context,
             createWorkerInstance(applicationContext).enqueue(worker)
         }
 
+        @Deprecated("定期実行がブレブレで使えないので [BackgroundJobReceiver.setBackgroundJob]でAlarmManager使うようにした")
         fun startRepeatWorker(applicationContext: Context, methodName: String?, interval: Long?) {
             val worker: PeriodicWorkRequest = PeriodicWorkRequestBuilder<MyCoroutineWorker>(interval
                     ?: 15, TimeUnit.MINUTES)
@@ -89,6 +90,7 @@ class MyCoroutineWorker(applicationContext: Context,
             )
         }
 
+        @Deprecated("[PeriodicWorkRequestBuilder]が使えないのでキャンセルも使えない")
         fun cancelWorker(applicationContext: Context) {
             val workManager = createWorkerInstance(applicationContext)
             workManager.cancelUniqueWork(TAG_MY_WORKER)
