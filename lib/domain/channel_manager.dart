@@ -21,8 +21,11 @@ class ChannelManger {
   static const _checkPermissionsMethodName = "checkPermissions";
 
   void register() {
+    // ネイティブから呼ばれたときのコールバックの登録
     _channel.setMethodCallHandler(_platformCallHandler);
+    // ネイティブでパーミッション処理呼んでる
     checkPermissions();
+    // ネイティブの処理をリクエスト
     _channel.invokeMethod(_cancelMethodName);
   }
 
@@ -45,7 +48,9 @@ class ChannelManger {
   }
 
   void cancelBackgroundService() {
-    _channel.invokeMethod(_cancelMethodName);
+    if (Platform.isAndroid) {
+      _channel.invokeMethod(_cancelMethodName);
+    }
   }
 
   Future<void> _platformCallHandler(MethodCall call) async {

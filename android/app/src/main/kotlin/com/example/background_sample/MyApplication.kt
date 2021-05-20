@@ -10,7 +10,7 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        // WorkManaerから利用できるようにEngine生成
+        // WorkManagerから利用できるようにEngine生成
         flutterEngine = FlutterEngine(this).apply {
             // Start executing Dart code to pre-warm the FlutterEngine.
             dartExecutor.executeDartEntrypoint(
